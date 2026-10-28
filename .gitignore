@@ -1,0 +1,18 @@
+# Secrets
+Secrets.xcconfig
+*.p8
+*.p12
+
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+.DS_Store
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# CocoaPods
+Pods/

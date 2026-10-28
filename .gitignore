@@ -16,3 +16,9 @@ xcuserdata/
 
 # CocoaPods
 Pods/
+
+# Local databases (contain your library data)
+*.db
+*.sqlite
+*.xcodeproj
+ExportOptions.plist

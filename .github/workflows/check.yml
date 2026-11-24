@@ -1,0 +1,41 @@
+name: Check connections
+
+# Tests whichever credentials are set and changes nothing.
+# With only SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET added, it asks Spotify for an
+# app token (client credentials) and reports success or Spotify's error.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-sync.txt
+
+      - name: Install
+        run: pip install -r requirements-sync.txt
+
+      - name: Check
+        env:
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+          SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_MUSIC_KEY_ID: ${{ secrets.APPLE_MUSIC_KEY_ID }}
+          APPLE_MUSIC_PRIVATE_KEY: ${{ secrets.APPLE_MUSIC_PRIVATE_KEY }}
+          APPLE_MUSIC_USER_TOKEN: ${{ secrets.APPLE_MUSIC_USER_TOKEN }}
+          SPOTIFY_PLAYLIST_NAME: ${{ vars.SPOTIFY_PLAYLIST_NAME }}
+          APPLE_PLAYLIST_NAME: ${{ vars.APPLE_PLAYLIST_NAME }}
+          SPOTIFY_PLAYLIST_ID: ${{ vars.SPOTIFY_PLAYLIST_ID }}
+          APPLE_PLAYLIST_ID: ${{ vars.APPLE_PLAYLIST_ID }}
+        run: python -m playlist_sync check

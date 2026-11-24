@@ -1,24 +1,22 @@
-# Secrets
-Secrets.xcconfig
+# Keys and tokens belong in GitHub repository secrets, never in files in this repo.
+Spotify keys
+*keys*.txt
 *.p8
 *.p12
+.env
+.env.*
 
-# Xcode
-build/
-DerivedData/
-*.xcuserstate
-xcuserdata/
-.DS_Store
+# Python
+__pycache__/
+*.pyc
+.venv/
 
-# Swift Package Manager
-.build/
-.swiftpm/
-
-# CocoaPods
-Pods/
-
-# Local databases (contain your library data)
+# Databases: only the sync's change log is tracked.
 *.db
 *.sqlite
-*.xcodeproj
-ExportOptions.plist
+!data/playlist_sync.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+.DS_Store

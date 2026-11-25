@@ -1,0 +1,22 @@
+# Keys and tokens belong in GitHub repository secrets, never in files in this repo.
+Spotify keys
+*keys*.txt
+*.p8
+*.p12
+.env
+.env.*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Databases: only the sync's change log is tracked.
+*.db
+*.sqlite
+!data/playlist_sync.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+.DS_Store

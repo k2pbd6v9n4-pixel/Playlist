@@ -39,3 +39,30 @@ jobs:
           SPOTIFY_PLAYLIST_ID: ${{ vars.SPOTIFY_PLAYLIST_ID }}
           APPLE_PLAYLIST_ID: ${{ vars.APPLE_PLAYLIST_ID }}
         run: python -m playlist_sync check
+
+      - name: Spotify API call test
+        env:
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_SECRET }}
+        run: |
+          python - <<'PY'
+          import os, sys, requests
+          tok = requests.post(
+              "https://accounts.spotify.com/api/token",
+              data={"grant_type": "client_credentials"},
+              auth=(os.environ["SPOTIFY_CLIENT_ID"], os.environ["SPOTIFY_CLIENT_SECRET"]),
+              timeout=30)
+          print("token request:", tok.status_code)
+          if tok.status_code != 200:
+              print(tok.text[:200]); sys.exit(1)
+          h = {"Authorization": "Bearer " + tok.json()["access_token"]}
+          r = requests.get("https://api.spotify.com/v1/search",
+                           params={"q": "Daft Punk", "type": "track", "limit": 3},
+                           headers=h, timeout=30)
+          print("search API call:", r.status_code)
+          if r.status_code != 200:
+              print(r.text[:300]); sys.exit(1)
+          for t in r.json()["tracks"]["items"]:
+              print(" -", t["name"], "by", t["artists"][0]["name"])
+          print("API test passed (app token only; no access to private playlists)")
+          PY
